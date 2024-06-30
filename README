@@ -1,0 +1,10 @@
+Objective:
+Using React, build the client-side for an app called myFlix based on its
+existing server-side code (REST API and database).
+
+The project consists of a list of movies along with a picture. The information displayed for each movie includes it's title, description, director and genre. The app also allows users to register an account in order to create a favMovies category.
+
+The client-side of the myFlix app will include several interface views (built using the React library) that will
+handle data through the (previously defined) REST API endpoints. This will complete the web app (both server-side and client-side) built using the MERN tech stack (MongoDB, Express, React and Node.js).
+
+The projects dependencies are: Express, React, MongoDB, jsonWebToken, Mongoose, body-parser and passport.
