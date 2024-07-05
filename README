@@ -1,12 +1,95 @@
-My Flix App
+My Movie API
 
 Objective:
-Using React, build the client-side for an app called myFlix based on its
-existing server-side code (REST API and database).
+This is a server-side app for a movie api developed using Node.js and Express based on existing server-side code (REST API and database).
 
-The project consists of a list of movies along with a picture. The information displayed for each movie includes it's title, description, director and genre. The app also allows users to register an account in order to create a favMovies category.
+The app consists of a list of movies along with a picture. The information displayed for each movie includes it's title, description, director and genre. The app also allows users to register an account in order to create a favMovies category.
 
 The client-side of the myFlix app will include several interface views (built using the React library) that will
 handle data through the (previously defined) REST API endpoints. This will complete the web app (both server-side and client-side) built using the MERN tech stack (MongoDB, Express, React and Node.js).
 
-The projects dependencies are: Express, React, MongoDB, jsonWebToken, Mongoose, body-parser and passport.
+The projects dependencies are: \_Node.js \_Express \_React \_MongoDB \_jsonWebToken \_Mongoose \_body-parser and \_passport.
+
+Endpoints:
+POST User Login
+URL: /login
+Request body: A JSON object with a username and password structured as follows:
+'Username': '{username}', 'Password': '{password}'
+Response body: JWT Auth token
+'token': '######'
+
+POST Register a New User
+*URL: /users
+*Request body: A JSON object with username, password and email structured as follows:
+{
+'Username': '{username}',
+'Password': '{password}',
+'Email': '{email}'
+}
+\*Response body: JWT Auth Token
+'token': '######'
+
+PUT Update User Info
+*URL: /users/{username}
+*Authorization: JWT Auth token
+*Request body: A JSON object with username, password, email and birthday structured as follows:
+'Username': {username}, 'Password': {password}, 'Email': {email}, 'Birthday': {MM/DD/YYY}
+*Response body: A JSON object structured the same with the updated information.
+
+GET Movie Api homepage
+*URL: /
+*Auhroization: JWT Auth token
+
+PUT Add a movie to user's Favs
+*URL: /users/{username}/movies/{ObjectID}
+*Authorization: JWT Auth token
+*Request body: none
+*Response body: A JSON object with the movieID added to the favMovies array.
+
+GET A list of all movies
+*URL: /movies
+*Authorization: JWT Auth token
+*Request body: none
+*Response body: A JSON object containing a list of all the movies in the database.
+
+GET A list of all Users
+*URL: /users
+*Authorization: JWT Auth token
+*Request body: none
+*Response body: A JSON object containing a list of all the users in the database.
+
+GET User by username
+*URL: /users/{username}
+*Authorization: JWT Auth token
+*Request body: none
+*Response body: A JSON object containing all the info on that user.
+
+GET Movie by Title
+*URL: /movies/{title}
+*Authorization: JWT Auth token
+*Request body: none
+*Response body: A JSON object containing all the info on that particular movie.
+
+GET Data about a Genre by name
+*URL: /movies/genre/{genreName}
+*Authorization: JWT Auth token
+*Request body: none
+*Response body: A JSON object containing info about that genre including the name of the genre and a description.
+
+GET Data about a Director by name
+*URL: /movies/director/{directorName}
+*Authorization: JWT Auth token
+*Request body: none
+*Response body: A JSON object containing info about that director including name, bio and birth year.
+
+DELETE Movie from user's Favs
+*URL: /users/{username}/movies/{ObjectID}
+*Authorization: JWT Auth token
+*Request body: none
+*Response body: A JSON object containing all the users info with the ObjectID for that movie removed from their favMovie array.
+
+DELETE user by username
+*URL: /users/{username}
+*Authorization: JWT Auth token
+*Request body: none
+*Response body: A response stating that the user has been deleted.
