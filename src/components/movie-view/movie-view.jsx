@@ -26,10 +26,13 @@ export const MovieView = ({ movie, onBackClick }) => (
     </div>
     <div>
       <span>Featured: </span>
-      <span>{boolean}</span>
+      <span>{movie.featured ? 'Yes' : 'No'}</span>
     </div>
     <div>
       <span>Actors: </span>
+      <span>
+        {Array.isArray(movie.actors) ? movie.actors.join(', ') : 'N/A'}
+      </span>
     </div>
     <button type="button" onClick={onBackClick}>
       Back
@@ -52,7 +55,7 @@ MovieView.propTypes = {
       birth: PropTypes.string.isRequired,
     }).isRequired,
     featured: PropTypes.bool.isRequired,
-    actors: PropTypes.array.isRequired,
+    actors: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
   onBackClick: PropTypes.func.isRequired,
 };
