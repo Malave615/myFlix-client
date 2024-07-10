@@ -1,34 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 
 export const MainView = () => {
-  const [movies, setMovies] = useState([
-    {
-      id: 1,
-      title: 'Inception',
-      image:
-        'https://upload.wikimedia.org/wikipedia/en/2/2e/Inception_%282010%29_theatrical_poster.jpg',
-      director: 'Christopher Nolan',
-      genre: 'Science Fiction',
-    },
-    {
-      id: 2,
-      title: 'The Shawshank Redemption',
-      image:
-        'https://upload.wikimedia.org/wikipedia/en/8/81/ShawshankRedemptionMoviePoster.jpg',
-      director: 'Frank Darabont',
-      genre: 'Drama',
-    },
-    {
-      id: 3,
-      title: 'The Godfather',
-      image:
-        'https://upload.wikimedia.org/wikipedia/en/1/1c/Godfather_ver1.jpg',
-      director: 'Francis Ford Coppola',
-      genre: 'Crime',
-    },
-  ]);
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    fetch('https://tracys-movie-api-083e9c37dd14.herokuapp.com/movies')
+      .then((response) => response.json())
+      .then((data) => {
+        const moviesFromApi = data.docs.map((doc) => ({
+          id: doc.key,
+          image: doc.imageURL,
+          title: doc.title,
+          description: doc.description,
+          genre: doc.genre_name,
+          genre_description: doc.genre_description,
+          director: doc.director_name,
+          director_bio: doc.director_bio,
+          director_birth: doc.director_birth,
+          featured: doc.featured ? 'Yes' : 'No',
+        }));
+
+        setMovies(moviesFromApi);
+      });
+  }, []);
 
   const [selectedMovie, setSelectedMovie] = useState(null);
 
