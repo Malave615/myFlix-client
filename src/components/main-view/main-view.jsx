@@ -5,28 +5,36 @@ import { MovieView } from '../movie-view/movie-view';
 export const MainView = () => {
   const [movies, setMovies] = useState([]);
 
+  const [selectedMovie, setSelectedMovie] = useState(null);
+
   useEffect(() => {
     fetch('https://tracys-movie-api-083e9c37dd14.herokuapp.com/movies')
       .then((response) => response.json())
       .then((data) => {
-        const moviesFromApi = data.docs.map((doc) => ({
-          id: doc.key,
-          image: doc.imageURL,
-          title: doc.title,
-          description: doc.description,
-          genre: doc.genre_name,
-          genre_description: doc.genre_description,
-          director: doc.director_name,
-          director_bio: doc.director_bio,
-          director_birth: doc.director_birth,
-          featured: doc.featured ? 'Yes' : 'No',
+        const moviesFromApi = data.map((movie) => ({
+          id: movie._id,
+          imagePath: movie.imagePath,
+          title: movie.title,
+          description: movie.description,
+          genre: [
+            {
+              name: movie.genre.Name,
+              description: movie.genre.Description,
+            },
+          ],
+          director: [
+            {
+              name: movie.director.Name,
+              bio: movie.director.Bio,
+              birth: movie.director.Birth,
+            },
+          ],
+          featured: movie.featured ? 'Yes' : 'No',
         }));
 
         setMovies(moviesFromApi);
       });
   }, []);
-
-  const [selectedMovie, setSelectedMovie] = useState(null);
 
   if (selectedMovie) {
     return (
