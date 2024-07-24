@@ -21,94 +21,95 @@ export const MainView = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
-      .then((data) => {
-        setMovies(data);
-      });
-  }, [token]);
+      .then(
+        (data) => {
+          const moviesFromApi = data.map((movie) => ({
+            id: movie.key,
+            image: movie.image,
+            title: movie.title,
+            description: movie.description,
+            genre: movie.genre,
+            director: movie.director,
+            actors: movie.actors,
+          }));
 
-  const moviesFromApi = movies.map((movie) => ({
-    id: movie.key,
-    image: movie.image,
-    title: movie.title,
-    description: movie.description,
-    genre: movie.genre,
-    director: movie.director,
-    actors: movie.actors,
-  }));
+          setMovies(moviesFromApi);
+        },
+        [token],
+      );
 
-  setMovies(moviesFromApi);
+    if (!user) {
+      return (
+        <>
+          <LoginView
+            onLoggedIn={(loggedInUser, loggedInUserToken) => {
+              setUser(loggedInUser);
+              setToken(loggedInUserToken);
+            }}
+          />
+          or
+          <SignupView />
+        </>
+      );
+    }
 
-  if (!user) {
+    if (selectedMovie) {
+      return (
+        <>
+          <button
+            type="button"
+            onClick={() => {
+              setUser(null);
+              setToken(null);
+              localStorage.clear();
+            }}
+          >
+            Logout
+          </button>
+          <MovieView
+            movie={selectedMovie}
+            onBackClick={() => setSelectedMovie(null)}
+          />
+        </>
+      );
+    }
+
+    if (movies.length === 0) {
+      return (
+        <>
+          <button
+            type="button"
+            onClick={() => {
+              setUser(null);
+            }}
+          >
+            Logout
+          </button>
+          <div>The list is empty!</div>
+        </>
+      );
+    }
+
     return (
-      <>
-        <LoginView
-          onLoggedIn={(loggedInUser, loggedInUserToken) => {
-            setUser(loggedInUser);
-            setToken(loggedInUserToken);
-          }}
-        />
-        or
-        <SignupView />
-      </>
-    );
-  }
-
-  if (selectedMovie) {
-    return (
-      <>
+      <div>
         <button
           type="button"
           onClick={() => {
             setUser(null);
-            setToken(null);
-            localStorage.clear();
           }}
         >
           Logout
         </button>
-        <MovieView
-          movie={selectedMovie}
-          onBackClick={() => setSelectedMovie(null)}
-        />
-      </>
+        {movies.map((movie) => (
+          <MovieCard
+            key={movie.id}
+            movie={movie}
+            onMovieClick={(newSelectedMovie) => {
+              setSelectedMovie(newSelectedMovie);
+            }}
+          />
+        ))}
+      </div>
     );
-  }
-
-  if (movies.length === 0) {
-    return (
-      <>
-        <button
-          type="button"
-          onClick={() => {
-            setUser(null);
-          }}
-        >
-          Logout
-        </button>
-        <div>The list is empty!</div>
-      </>
-    );
-  }
-
-  return (
-    <div>
-      <button
-        type="button"
-        onClick={() => {
-          setUser(null);
-        }}
-      >
-        Logout
-      </button>
-      {movies.map((movie) => (
-        <MovieCard
-          key={movie.id}
-          movie={movie}
-          onMovieClick={(newSelectedMovie) => {
-            setSelectedMovie(newSelectedMovie);
-          }}
-        />
-      ))}
-    </div>
-  );
+  });
 };
