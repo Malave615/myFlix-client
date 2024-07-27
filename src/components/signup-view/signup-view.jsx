@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 
 export const SignupView = () => {
   const [username, setUsername] = useState('');
@@ -16,7 +18,7 @@ export const SignupView = () => {
       Birth: birth,
     };
 
-    fetch('https://tracys-movie-api-083e9c37dd14.herokuapp.com/', {
+    fetch('https://tracys-movie-api-083e9c37dd14.herokuapp.com/users', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
@@ -33,45 +35,48 @@ export const SignupView = () => {
   };
 
   return (
-    <form on Submit={handleSubmit}>
-      <label>
-        Username:
-        <input
+    <Form on Submit={handleSubmit}>
+      <Form.Group controlId="signUpFormUsername">
+      <Form.Label>Username:</Form.Label>
+        <Form.Control
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
           minLength="3"
         />
-      </label>
-      <label>
-        Password:
-        <input
+      </Form.Group>
+
+      <Form.Group controlId="signUpFormPassword">
+        <Form.Label>Password:</Form.Label>
+        <Form.Control
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-      </label>
-      <label>
-        Email:
-        <input
+      </Form.Group>
+
+      <Form.Group controlId="signUpFormEmail">
+        <Form.Label>Email:</Form.Label>
+        <Form.Control
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-      </label>
-      <label>
-        Birth:
-        <input
+      </Form.Group>
+
+      <Form.Group controlId="signUpFormBirth">
+        <Form.Label>Birth:</Form.Label>
+        <Form.Control
           type="year"
           value={birth}
           onChange={(e) => setBirth(e.target.value)}
           required
         />
-      </label>
-      <button type="submit">Submit</button>
-    </form>
+      </Form.Group>
+      <Button type="submit">Submit</Button>
+    </Form>
   );
 };
