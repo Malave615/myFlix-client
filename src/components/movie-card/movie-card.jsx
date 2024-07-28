@@ -1,21 +1,20 @@
 import PropTypes from 'prop-types';
+import { Button, Card } from 'react-bootstrap';
 
 export const MovieCard = ({ movie, onMovieClick }) => (
   // component code here
-  <div
-    role="button"
-    tabIndex={0}
-    onClick={() => {
-      onMovieClick(movie);
-    }}
-    onKeyDown={(event) => {
-      if (event.key === 'Enter') {
-        onMovieClick(movie);
-      }
-    }}
-  >
-    {movie.title}
-  </div>
+  <Card className="h-100">
+    <Card.Img variant="top" src={movie.image} />
+    <Card.Body>
+      <Card.Title>{movie.title}</Card.Title>
+      <Card.Text>{movie.description}</Card.Text>
+    </Card.Body>
+    <Card.Footer>
+      <Button variant="link" onClick={() => onMovieClick(movie)}>
+        Open
+      </Button>
+    </Card.Footer>
+  </Card>
 );
 
 MovieCard.propTypes = {

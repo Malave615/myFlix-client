@@ -1,5 +1,6 @@
 {
   "name": "myFlix-client",
+  "main": "src/index.jsx",
   "version": "1.0.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,9 +10,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bootstrap": "^5.3.3",
+    "prop-types": "^15.8.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "prop-types": "^15.8.1"
+    "react-bootstrap": "^2.10.4",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.12.0",
