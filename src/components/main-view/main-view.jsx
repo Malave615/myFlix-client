@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { MovieCard } from '../movie-card/movie-card';
-import { MovieView } from '../movie-view/movie-view';
 import { LoginView } from '../login-view/login-view';
+import { MovieView } from '../movie-view/movie-view';
 import { SignupView } from '../signup-view/signup-view';
+import { NavigationBar } from '../navigation-bar/navigation-bar';
+import { ProfileView } from '../profile-view/profile-view';
+import { MovieCard } from '../movie-card/movie-card';
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -12,7 +15,7 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser || null);
   const [token, setToken] = useState(storedToken || null);
   const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [favMovies, setFavMovies] = useState(user?.FavoriteMovies || []);
 
   useEffect(() => {
     if (!token) return;
@@ -38,6 +41,11 @@ export const MainView = () => {
       });
   }, [token]);
 
+  useEffect(() => {
+    if (!user) setFavMovies([]);
+    else setFavMovies(user.FavoriteMovies || []);
+  }, [user]);
+
   const renderContent = () => {
     if (!user) {
       return (
@@ -53,34 +61,80 @@ export const MainView = () => {
         </Col>
       );
     }
-    if (selectedMovie) {
-      return (
-        <Col md={8}>
-          <MovieView
-            movie={selectedMovie}
-            onBackClick={() => setSelectedMovie(null)}
-          />
-        </Col>
-      );
-    }
-
-    if (movies.length === 0) {
-      return <div>The list is empty!</div>;
-    }
 
     return (
-      <>
-        {movies.map((movie) => (
-          <Col className="mb-5" key={movie.id} md={3}>
-            <MovieCard
-              movie={movie}
-              onMovieClick={(newSelectedMovie) => {
-                setSelectedMovie(newSelectedMovie);
-              }}
+      <BrowserRouter>
+        <NavigationBar />
+        <Row className="justify-content-md-center">
+          <Routes>
+            <Route
+              path="/signup"
+              element={
+                user ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Col md={5}>
+                    <SignupView />
+                  </Col>
+                )
+              }
             />
-          </Col>
-        ))}
-      </>
+            <Route
+              path="/login"
+              element={
+                user ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Col md={5}>
+                    <LoginView
+                      onLoggedIn={(loggedInUser) => setUser(loggedInUser)}
+                    />
+                  </Col>
+                )
+              }
+            />
+            {!user && <Navigate to="/login" replace />}
+            {user && movies.length === 0 && <Col>The list is empty!</Col>}
+            {user && movies.length > 0 && (
+              <>
+                <Route
+                  path="/movies/:movieId"
+                  element={
+                    <Col md={8}>
+                      <MovieView movies={movies} favMovies={favMovies} />
+                    </Col>
+                  }
+                />
+                <Route
+                  path="/"
+                  element={movies.map((movie) => (
+                    <Col className="mb-4" key={movie.id} md={3}>
+                      <MovieCard
+                        movie={movie}
+                        fav={favMovies.includes(movie._id)}
+                      />
+                    </Col>
+                  ))}
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    !user ? (
+                      <Navigate to="/login" replace />
+                    ) : (
+                      <ProfileView
+                        movies={movies}
+                        user={user}
+                        setFavMovies={setFavMovies}
+                      />
+                    )
+                  }
+                />
+              </>
+            )}
+          </Routes>
+        </Row>
+      </BrowserRouter>
     );
   };
 
