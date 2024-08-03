@@ -3,6 +3,7 @@ import './movie-view.scss';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { MovieCard } from '../movie-card/movie-card';
 
 export const MovieView = ({
   movies,
@@ -11,8 +12,9 @@ export const MovieView = ({
   onRemoveFromFavorites,
 }) => {
   const { movieId } = useParams();
-  const movie = movies.find((m) => m.id === movieId);
+  const movie = movies.find((m) => m._id === movieId);
   const [isFav, setIsFav] = useState(favMovies?.includes(movieId) || false);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   if (!movie) {
     return <div>Movie not found</div>;
@@ -23,6 +25,34 @@ export const MovieView = ({
     if (isFav) onRemoveFromFavorites(movieId);
     else onAddToFavorites(movieId);
   };
+
+  const similarMovies = movies.filter(
+    (m) => m._id !== movieId && m.genre.name === movie.genre.name,
+  );
+
+  if (selectedMovie) {
+    return (
+      <>
+        <MovieView
+          movie={selectedMovie}
+          onBackClicked={() => {
+            setSelectedMovie(null);
+          }}
+        />
+        <br />
+        <h2>Similar Movies</h2>
+        {similarMovies.map((m) => (
+          <MovieCard
+            key={m._id}
+            movie={m}
+            onMovieClick={(newSelectedMovie) => {
+              setSelectedMovie(newSelectedMovie);
+            }}
+          />
+        ))}
+      </>
+    );
+  }
 
   return (
     <Card className="h-100 w-100">
@@ -81,3 +111,5 @@ MovieView.propTypes = {
   onAddToFavorites: PropTypes.func.isRequired,
   onRemoveFromFavorites: PropTypes.func.isRequired,
 };
+
+export default MovieView;
