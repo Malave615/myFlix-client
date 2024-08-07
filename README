@@ -1,7 +1,10 @@
 My Movie API
 
+Project Overview
+myFlix-client is the front-end application for a movie database movie_api I previously built. It allows users to browse a collection of movies, view detailed information about each movie, create and manage an account including adding a list of their favorite movies.
+
 Objective:
-This is a server-side app for a movie api developed using Node.js and Express based on existing server-side code (REST API and database).
+This is a server-side app for a movie api developed using React, React Bootstap, Node.js and Express based on existing server-side code (REST API and database).
 
 The app consists of a list of movies along with a picture. The information displayed for each movie includes it's title, description, director and genre. The app also allows users to register an account in order to create a favMovies category.
 
