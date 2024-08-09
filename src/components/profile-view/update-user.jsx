@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form } from 'react-bootstrap/Form';
+import { Form } from 'react-bootstrap';
 
 const UpdateUser = ({ handleSubmit, handleUpdate, user }) => (
   <>
