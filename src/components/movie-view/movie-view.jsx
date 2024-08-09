@@ -1,29 +1,36 @@
 import { useParams, Link } from 'react-router-dom';
 import './movie-view.scss';
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { MovieCard } from '../movie-card/movie-card';
+import { addFavorite, removeFavorite } from '../../redux/reducers/user/user';
 
-export const MovieView = ({
-  movies,
-  favMovies,
-  onAddToFavorites,
-  onRemoveFromFavorites,
-}) => {
+export const MovieView = () => {
   const { movieId } = useParams();
-  const movie = movies.find((m) => m._id === movieId);
-  const [isFav, setIsFav] = useState(favMovies?.includes(movieId) || false);
+  const movies = useSelector((state) => state.movies.list);
+  const favMovies = useSelector((state) => state.user.favorites);
+  const dispatch = useDispatch();
+  const [isFav, setIsFav] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
+
+  useEffect(() => {
+    setIsFav(favMovies.includes(movieId));
+  }, [movieId, favMovies]);
+
+  const movie = movies.find((m) => m._id === movieId);
 
   if (!movie) {
     return <div>Movie not found</div>;
   }
 
   const handleFavoriteClick = () => {
+    if (isFav) {
+      dispatch(removeFavorite(movieId));
+    } else {
+      dispatch(addFavorite(movieId));
+    }
     setIsFav(!isFav);
-    if (isFav) onRemoveFromFavorites(movieId);
-    else onAddToFavorites(movieId);
   };
 
   const similarMovies = movies.filter(
@@ -88,28 +95,6 @@ export const MovieView = ({
       </Container>
     </Card>
   );
-};
-
-MovieView.propTypes = {
-  movies: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
-      Title: PropTypes.string.isRequired,
-      Description: PropTypes.string.isRequired,
-      genre: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-      }).isRequired,
-      director: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string.isRequired,
-        }),
-      ).isRequired,
-    }),
-  ).isRequired,
-  favMovies: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onAddToFavorites: PropTypes.func.isRequired,
-  onRemoveFromFavorites: PropTypes.func.isRequired,
 };
 
 export default MovieView;
