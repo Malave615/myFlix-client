@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import './movie-view.scss';
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { MovieCard } from '../movie-card/movie-card';
@@ -12,89 +12,83 @@ export const MovieView = ({
   onRemoveFromFavorites,
 }) => {
   const { movieId } = useParams();
-  const [isFav, setIsFav] = useState(false);
+  const movie = movies.find((m) => m._id === movieId);
+  const [isFav, setIsFav] = useState(favMovies?.includes(movieId) || false);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
-  useEffect(() => {
-    setIsFav(favMovies.includes(movieId));
-  }, [movieId, favMovies]);
-
-  const movie = movies.find((m) => m._id === movieId);
+  // const [favMovies, setFavMovies] = useState([]);
 
   if (!movie) {
     return <div>Movie not found</div>;
   }
 
   const handleFavoriteClick = () => {
-    if (isFav) {
-      onRemoveFromFavorites(movieId);
-    } else {
-      onAddToFavorites(movieId);
-    }
     setIsFav(!isFav);
+    if (isFav) onRemoveFromFavorites(movieId);
+    else onAddToFavorites(movieId);
   };
 
   const similarMovies = movies.filter(
     (m) => m._id !== movieId && m.genre.name === movie.genre.name,
   );
 
-  return (
-    <>
-      {selectedMovie && (
-        <div>
-          <MovieView
-            movie={selectedMovie}
-            onBackClicked={() => {
-              setSelectedMovie(null);
+  if (selectedMovie) {
+    return (
+      <>
+        <MovieView
+          movie={selectedMovie}
+          onBackClicked={() => {
+            setSelectedMovie(null);
+          }}
+        />
+        <br />
+        <h2>Similar Movies</h2>
+        {similarMovies.map((m) => (
+          <MovieCard
+            key={m._id}
+            movie={m}
+            onMovieClick={(newSelectedMovie) => {
+              setSelectedMovie(newSelectedMovie);
             }}
           />
-          <br />
-          <h2>Similar Movies</h2>
-          {similarMovies.map((m) => (
-            <MovieCard
-              key={m._id}
-              movie={m}
-              onMovieClick={(newSelectedMovie) => {
-                setSelectedMovie(newSelectedMovie);
-              }}
-            />
-          ))}
-        </div>
-      )}
-      {!selectedMovie && (
-        <Card className="h-100 w-100">
-          <Container>
-            <Row xs={1} sm={1} md={2}>
-              <Col>
-                <img src={movie.image} alt={movie.Title} />
-              </Col>
-              <Col>
-                <Card.Body>
-                  <Card.Title>{movie.Title}</Card.Title>
-                  <p>
-                    <strong>Description:</strong> {movie.Description}
-                  </p>
-                  <p>Genre: {movie.genre.name}</p>
-                  <p>
-                    Director:{' '}
-                    {movie.director.map((director, i) => (
-                      <span key={i}>{director.name}&nbsp;</span>
-                    ))}
-                  </p>
-                  <Button onClick={handleFavoriteClick}>
-                    {!isFav ? 'Add to favorites' : 'Remove from favorites'}
-                  </Button>
+        ))}
+      </>
+    );
+  }
 
-                  <Link to="/">
-                    <Button>Back</Button>
-                  </Link>
-                </Card.Body>
-              </Col>
-            </Row>
-          </Container>
-        </Card>
-      )}
-    </>
+  return (
+    <Card className="h-100 w-100">
+      <Container>
+        <Row xs={1} sm={1} md={2}>
+          <Col>
+            <img src={movie.image} alt={movie.Title} />
+          </Col>
+          <Col>
+            <Card.Body>
+              <Card.Title>{movie.Title}</Card.Title>
+              <p>
+                <strong>Description:</strong>
+                {movie.Description}
+              </p>
+              <p>Genre: {movie.genre.name}</p>
+              <p>
+                Director:{' '}
+                {movie.director.map((director, i) => (
+                  <span key={i}>{director.Name}&nbsp;</span>
+                ))}
+              </p>
+              <Button onClick={() => handleFavoriteClick()}>
+                {!isFav ? 'Add to favorites' : 'Remove from favorites'}
+              </Button>
+
+              <Link to="/">
+                <Button>Back</Button>
+              </Link>
+            </Card.Body>
+          </Col>
+        </Row>
+      </Container>
+    </Card>
   );
 };
 
