@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../../redux/reducers/user/user';
+import PropTypes from 'prop-types';
 
-export const LoginView = () => {
+export const LoginView = ({ onLoggedIn }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useDispatch();
+
+  LoginView.propTypes = {
+    onLoggedIn: PropTypes.func.isRequired,
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -23,13 +25,22 @@ export const LoginView = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    }).then((response) => {
-      if (response.ok) {
-        dispatch(setUser(username));
-      } else {
-        alert('Login failed. Please try again.');
-      }
-    });
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log('Login response: ', data);
+        if (data.user) {
+          localStorage.setItem('user', JSON.stringify(data.user));
+          localStorage.setItem('token', data.token);
+          onLoggedIn(data.user, data.token);
+        } else {
+          alert('No such user found.');
+        }
+      })
+      .catch((error) => {
+        console.error('Error: ', error.message);
+        alert(error.message);
+      });
   };
 
   return (

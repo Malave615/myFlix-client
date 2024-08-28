@@ -38,8 +38,7 @@ export const SignupView = () => {
     <div>
       <h1>Sign Up</h1>
       <Form
-        on
-        Submit={handleSubmit}
+        onSubmit={handleSubmit}
         className="justify-content-center align-items-center"
       >
         <Form.Group controlId="signUpFormUsername">
