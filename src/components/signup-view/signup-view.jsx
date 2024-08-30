@@ -36,7 +36,7 @@ export const SignupView = () => {
 
   return (
     <div>
-      <h1>Sign Up</h1>
+      <h2>Sign Up</h2>
       <Form
         onSubmit={handleSubmit}
         className="justify-content-center align-items-center"
