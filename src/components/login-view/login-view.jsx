@@ -3,13 +3,13 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import PropTypes from 'prop-types';
 
+LoginView.propTypes = {
+  onLoggedIn: PropTypes.func.isRequired,
+};
+
 export const LoginView = ({ onLoggedIn }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  LoginView.propTypes = {
-    onLoggedIn: PropTypes.func.isRequired,
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -27,7 +27,7 @@ export const LoginView = ({ onLoggedIn }) => {
       body: JSON.stringify(data),
     })
       .then((response) => response.json())
-      .then((response) => {
+      .then((data) => {
         console.log('Login response: ', data);
         if (data.user) {
           localStorage.setItem('user', JSON.stringify(data.user));
@@ -45,7 +45,8 @@ export const LoginView = ({ onLoggedIn }) => {
 
   return (
     <div className="mx-3 my-4">
-      <h1>Login</h1>
+      <h1>myFlix</h1>
+      <h2>Login</h2>
       <Form
         onSubmit={handleSubmit}
         className="row h-100 justify-content-center align-items-center"
