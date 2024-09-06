@@ -12,7 +12,7 @@ export const MovieView = ({
   onRemoveFromFavorites,
 }) => {
   const { movieId } = useParams();
-  const movie = movies.find((m) => m._id === movieId);
+  const movie = movies.find((m) => m.id === movieId);
   const [isFav, setIsFav] = useState(favMovies?.includes(movieId) || false);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
@@ -70,12 +70,9 @@ export const MovieView = ({
                 <strong>Description:</strong>
                 {movie.Description}
               </p>
-              <p>Genre: {movie.genre.name}</p>
+              <p>Genre: {movie.genre.Name}</p>
               <p>
-                Director:{' '}
-                {movie.director.map((director, i) => (
-                  <span key={i}>{director.Name}&nbsp;</span>
-                ))}
+                Director: <span>{movie.director.Name}&nbsp;</span>
               </p>
               <Button onClick={() => handleFavoriteClick()}>
                 {!isFav ? 'Add to favorites' : 'Remove from favorites'}

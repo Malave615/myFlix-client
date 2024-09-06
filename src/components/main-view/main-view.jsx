@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
@@ -26,15 +26,15 @@ export const MainView = () => {
       .then((response) => response.json())
       .then((data) => {
         const moviesFromApi = data.map((movie) => ({
-          id: movie.key,
+          id: movie._id,
           image: movie.image,
-          title: movie.title,
-          description: movie.description,
-          genre: movie.genre,
-          director: movie.director,
-          actors: movie.actors,
+          title: movie.Title,
+          description: movie.Description,
+          genre: movie.Genre,
+          director: movie.Director,
+          actors: movie.Actors,
         }));
-
+        console.log(moviesFromApi);
         setMovies(moviesFromApi);
       })
       .catch((error) => {
@@ -94,8 +94,8 @@ export const MainView = () => {
                 )
               }
             />
-            {!user && <Navigate to="/login" replace />}
-            {user && movies.length === 0 && <Col>The list is empty!</Col>}
+            {/* {!user && <Navigate to="/login" replace />} */}
+            {/* {user && movies.length === 0 && <Col>The list is empty!</Col>} */}
             {user && movies.length > 0 && (
               <>
                 <Route

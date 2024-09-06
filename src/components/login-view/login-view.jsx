@@ -3,10 +3,6 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import PropTypes from 'prop-types';
 
-LoginView.propTypes = {
-  onLoggedIn: PropTypes.func.isRequired,
-};
-
 export const LoginView = ({ onLoggedIn }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -14,7 +10,7 @@ export const LoginView = ({ onLoggedIn }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const data = {
+    const loginData = {
       Username: username,
       Password: password,
     };
@@ -24,7 +20,7 @@ export const LoginView = ({ onLoggedIn }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(loginData),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -78,4 +74,8 @@ export const LoginView = ({ onLoggedIn }) => {
       </Form>
     </div>
   );
+};
+
+LoginView.propTypes = {
+  onLoggedIn: PropTypes.func.isRequired,
 };

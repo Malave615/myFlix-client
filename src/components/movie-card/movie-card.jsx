@@ -16,15 +16,15 @@ export const MovieCard = ({ movie, fav }) => {
         className="h-100"
         variant="top"
         src={movie.image}
-        alt={movie.Title}
+        alt={movie.title}
       />
       <Card.Body>
-        <Card.Title>{movie.Title}</Card.Title>
+        <Card.Title>{movie.title}</Card.Title>
         <Card.Text>
           {movie.description}
           {isFav && <span className="fav-badge">Favorite</span>}
         </Card.Text>
-        <Link to={`/movies/${encodeURIComponent(movie._id)}`}>
+        <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
           <Button variant="link">Open</Button>
         </Link>
       </Card.Body>
@@ -34,9 +34,9 @@ export const MovieCard = ({ movie, fav }) => {
 
 MovieCard.propTypes = {
   movie: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
-    Title: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     genre: PropTypes.shape({
       name: PropTypes.string.isRequired,
