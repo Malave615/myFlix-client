@@ -1,3 +1,43 @@
+.back-button {
+  color: #f5f5f5;
+  background-color: #1e90ff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 12px;
+}
+
+.profile-view .fav-movie {
+  margin-bottom: 15px;
+}
+
+.profile-view .fav-movie .figure {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  margin: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-view .fav-movie .figure img {
+  height: 400px;
+  margin: auto;
+  display: block;
+}
+
+.profile-view .fav-movie .figure figcaption {
+  text-align: center;
+}
+
+.profile-view .fav-movie button.btn {
+  margin: auto;
+  display: block;
+}
+
+.profile-view .fav-movie .card {
+  margin-bottom: 15px;
+}
+
 *, :after, :before {
   box-sizing: border-box;
 }
@@ -20515,45 +20555,5 @@ textarea.form-control-lg {
   .d-print-none {
     display: none !important;
   }
-}
-
-.back-button {
-  color: #f5f5f5;
-  background-color: #1e90ff;
-  border: none;
-  border-radius: 4px;
-  padding: 4px 12px;
-}
-
-.profile-view .fav-movie {
-  margin-bottom: 15px;
-}
-
-.profile-view .fav-movie .figure {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
-  margin: auto;
-  position: relative;
-  overflow: hidden;
-}
-
-.profile-view .fav-movie .figure img {
-  height: 400px;
-  margin: auto;
-  display: block;
-}
-
-.profile-view .fav-movie .figure figcaption {
-  text-align: center;
-}
-
-.profile-view .fav-movie button.btn {
-  margin: auto;
-  display: block;
-}
-
-.profile-view .fav-movie .card {
-  margin-bottom: 15px;
 }
 /*# sourceMappingURL=index.2212206d.css.map */
