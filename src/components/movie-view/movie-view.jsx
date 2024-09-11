@@ -12,7 +12,7 @@ export const MovieView = ({
   onRemoveFromFavorites,
 }) => {
   const { movieId } = useParams();
-  const movie = movies.find((m) => m.id === movieId);
+  const movie = movies.find((m) => m._id === movieId);
   const [isFav, setIsFav] = useState(favMovies?.includes(movieId) || false);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
@@ -29,7 +29,7 @@ export const MovieView = ({
   };
 
   const similarMovies = movies.filter(
-    (m) => m._id !== movieId && m.genre.name === movie.genre.name,
+    (m) => m._id !== movieId && m.Genre.name === movie.Genre.name,
   );
 
   if (selectedMovie) {
@@ -61,7 +61,7 @@ export const MovieView = ({
       <Container>
         <Row xs={1} sm={1} md={2}>
           <Col>
-            <img src={movie.image} alt={movie.Title} />
+            <img src={movie.ImagePath} alt={movie.Title} />
           </Col>
           <Col>
             <Card.Body>
@@ -70,9 +70,24 @@ export const MovieView = ({
                 <strong>Description:</strong>
                 {movie.Description}
               </p>
-              <p>Genre: {movie.genre.Name}</p>
               <p>
-                Director: <span>{movie.director.Name}&nbsp;</span>
+                <strong>Genre:</strong>
+                {movie.Genre.Name}
+                {movie.Genre.Description}
+              </p>
+              <p>
+                <strong>Director:</strong>
+                <span>{movie.Director.Name}&nbsp;</span>
+                <span>{movie.Director.Bio}&nbsp;</span>
+                <span>{movie.Director.Birth}&nbsp;</span>
+              </p>
+              <p>
+                <strong>Featured:</strong>
+                {movie.Featured}
+              </p>
+              <p>
+                <strong>Actors:</strong>
+                {movie.Actors.join(', ')}
               </p>
               <Button onClick={() => handleFavoriteClick()}>
                 {!isFav ? 'Add to favorites' : 'Remove from favorites'}
@@ -93,15 +108,18 @@ MovieView.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
+      ImagePath: PropTypes.string.isRequired,
       Title: PropTypes.string.isRequired,
       Description: PropTypes.string.isRequired,
-      genre: PropTypes.shape({
+      Genre: PropTypes.shape({
         name: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
       }).isRequired,
-      director: PropTypes.arrayOf(
+      Director: PropTypes.arrayOf(
         PropTypes.shape({
           name: PropTypes.string.isRequired,
+          bio: PropTypes.string.isRequired,
+          birth: PropTypes.string.isRequired,
         }),
       ).isRequired,
     }),

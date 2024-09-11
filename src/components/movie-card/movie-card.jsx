@@ -15,16 +15,16 @@ export const MovieCard = ({ movie, fav }) => {
       <Card.Img
         className="h-100"
         variant="top"
-        src={movie.image}
-        alt={movie.title}
+        src={movie.ImagePath}
+        alt={movie.Title}
       />
       <Card.Body>
-        <Card.Title>{movie.title}</Card.Title>
+        <Card.Title>{movie.Title}</Card.Title>
         <Card.Text>
-          {movie.description}
+          {movie.Description}
           {isFav && <span className="fav-badge">Favorite</span>}
         </Card.Text>
-        <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
+        <Link to={`/movies/${encodeURIComponent(movie._id)}`}>
           <Button variant="link">Open</Button>
         </Link>
       </Card.Body>
@@ -34,21 +34,21 @@ export const MovieCard = ({ movie, fav }) => {
 
 MovieCard.propTypes = {
   movie: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    genre: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    Title: PropTypes.string.isRequired,
+    Description: PropTypes.string.isRequired,
+    Genre: PropTypes.shape({
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
     }).isRequired,
-    director: PropTypes.shape({
+    Director: PropTypes.shape({
       name: PropTypes.string.isRequired,
       bio: PropTypes.string.isRequired,
       birth: PropTypes.string.isRequired,
     }).isRequired,
-    featured: PropTypes.bool.isRequired,
-    actors: PropTypes.arrayOf(PropTypes.string).isRequired,
+    Featured: PropTypes.bool.isRequired,
+    Actors: PropTypes.arrayOf(PropTypes.string).isRequired,
+    ImagePath: PropTypes.string.isRequired,
   }).isRequired,
   fav: PropTypes.bool.isRequired,
 };

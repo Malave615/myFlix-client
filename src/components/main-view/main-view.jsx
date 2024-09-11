@@ -27,12 +27,13 @@ export const MainView = () => {
       .then((data) => {
         const moviesFromApi = data.map((movie) => ({
           id: movie._id,
-          image: movie.image,
           title: movie.Title,
           description: movie.Description,
           genre: movie.Genre,
           director: movie.Director,
           actors: movie.Actors,
+          featured: movie.Featured,
+          imagePath: movie.ImagePath,
         }));
         console.log(moviesFromApi);
         setMovies(moviesFromApi);

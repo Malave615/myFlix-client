@@ -35,8 +35,8 @@ const MoviesList = ({ movies, filter }) => {
 MoviesList.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
+      _id: PropTypes.number.isRequired,
+      Title: PropTypes.string.isRequired,
     }),
   ).isRequired,
   filter: PropTypes.string.isRequired,
