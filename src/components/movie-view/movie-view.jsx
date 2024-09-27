@@ -37,7 +37,7 @@ export const MovieView = ({
     return (
       <>
         <MovieView
-          movie={selectedMovie}
+          movies={selectedMovie}
           favMovies={favMovies}
           onAddToFavorites={onAddToFavorites}
           onRemoveFromFavorites={onRemoveFromFavorites}
