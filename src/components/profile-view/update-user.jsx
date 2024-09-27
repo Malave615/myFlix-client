@@ -1,33 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 
-const UpdateUser = ({ handleSubmit, handleUpdate, user }) => (
+const UpdateUser = ({ handleUpdate, user }) => (
   <>
     <h2>Want to change some info?</h2>
-    <form className="profile-form" onSubmit={(e) => handleSubmit(e)}>
-      <label htmlFor="username">Username:</label>
-      <input
-        type="text"
-        name="Username"
-        defaultValue={user.Username}
-        onChange={(e) => handleUpdate(e)}
-      />
-      <label htmlFor="password">Password:</label>
-      <input
-        type="password"
-        name="Password"
-        defaultValue={user.Password}
-        onChange={(e) => handleUpdate(e)}
-      />
-    </form>
-
-    <h4>Update</h4>
-    <Form>
+    <Form className="profile-form">
       <Form.Group>
-        <Form.Label>Username:</Form.Label>
+        <Form.Label htmlFor="username">Username:</Form.Label>
         <Form.Control
           type="text"
+          name="Username"
           defaultValue={user.Username}
           onChange={(e) => handleUpdate(e)}
           required
@@ -36,21 +19,25 @@ const UpdateUser = ({ handleSubmit, handleUpdate, user }) => (
       </Form.Group>
 
       <Form.Group>
-        <Form.Label>Password:</Form.Label>
+        <Form.Label htmlFor="password">Password:</Form.Label>
         <Form.Control
           type="password"
+          name="Password"
           defaultValue={user.Password}
-          onChange={(e) => handleUpdate(e)}
+          onChange={handleUpdate}
           required
           placeholder="Enter a password"
         />
       </Form.Group>
+
+      <Button variant="primary" type="submit">
+        Update
+      </Button>
     </Form>
   </>
 );
 
 UpdateUser.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
   handleUpdate: PropTypes.func.isRequired,
   user: PropTypes.shape({
     Username: PropTypes.string.isRequired,

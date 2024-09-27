@@ -8,9 +8,9 @@ import UpdateUser from './update-user';
 
 // Define the ProfileView component
 export const ProfileView = ({ movies, user, updateUser, handleUserLogout }) => {
-  const favoriteMoviesList = movies.filter((m) =>
-    user.FavoriteMovies.includes(m._id),
-  );
+  const favoriteMoviesList = user.FavoriteMovies
+    ? movies.filter((m) => user.FavoriteMovies.includes(m.id))
+    : [];
   /* const handleUserLogout = () => {
       console.log('User logged out');
   } */
@@ -19,8 +19,13 @@ export const ProfileView = ({ movies, user, updateUser, handleUserLogout }) => {
     console.log(user);
   }, [user]);
 
-  const handleUpdate = (e, updatedUser) => {
+  const handleUpdate = (e) => {
     e.preventDefault();
+
+    const updatedUser = {
+      Username: e.target.Username.value,
+      Password: e.target.Password.value,
+    };
 
     fetch(
       `https://tracys-movie-api-083e9c37dd14.herokuapp.com/users/${
@@ -44,6 +49,34 @@ export const ProfileView = ({ movies, user, updateUser, handleUserLogout }) => {
       });
   };
 
+  // Define removeFav function to handle removing a movie from favorites
+  const removeFav = (movieId) => {
+    // Remove movieId from user's favorite movies list
+    const updatedFavMovies = user.FavoriteMovies.filter((id) => id !== movieId);
+
+    updateUser({ ...user, FavoriteMovies: updatedFavMovies });
+
+    // Send request to update user's favorites on the server
+    fetch(
+      `https://tracys-movie-api-083e9c37dd14.herokuapp.com/users/${user.Username}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ FavoriteMovies: updatedFavMovies }),
+      },
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        updateUser(data);
+      })
+      .catch((error) => {
+        console.error('Error updating favorites: ', error);
+      });
+  };
+
   return (
     <Container>
       <Row>
@@ -52,7 +85,10 @@ export const ProfileView = ({ movies, user, updateUser, handleUserLogout }) => {
           <Card>
             <Card.Body>
               <UserInfo name={user.Username} email={user.Email} />
-              <FavoriteMovies movies={favoriteMoviesList} />
+              <FavoriteMovies
+                favoriteMovieList={favoriteMoviesList}
+                removeFav={removeFav}
+              />
               <UpdateUser user={user} handleUpdate={handleUpdate} />
               <button type="button" onClick={handleUserLogout}>
                 Logout

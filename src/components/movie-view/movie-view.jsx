@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import './movie-view.scss';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -12,9 +12,10 @@ export const MovieView = ({
   onRemoveFromFavorites,
 }) => {
   const { movieId } = useParams();
-  const movie = movies.find((m) => m._id === movieId);
+  const movie = movies.find((m) => m.id === movieId);
   const [isFav, setIsFav] = useState(favMovies?.includes(movieId) || false);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const navigate = useNavigate();
 
   // const [favMovies, setFavMovies] = useState([]);
 
@@ -29,7 +30,7 @@ export const MovieView = ({
   };
 
   const similarMovies = movies.filter(
-    (m) => m._id !== movieId && m.Genre.name === movie.Genre.name,
+    (m) => m.id !== movieId && m.genre.Name === movie.genre.Name,
   );
 
   if (selectedMovie) {
@@ -37,6 +38,9 @@ export const MovieView = ({
       <>
         <MovieView
           movie={selectedMovie}
+          favMovies={favMovies}
+          onAddToFavorites={onAddToFavorites}
+          onRemoveFromFavorites={onRemoveFromFavorites}
           onBackClicked={() => {
             setSelectedMovie(null);
           }}
@@ -45,10 +49,12 @@ export const MovieView = ({
         <h2>Similar Movies</h2>
         {similarMovies.map((m) => (
           <MovieCard
-            key={m._id}
+            key={m.id}
             movie={m}
+            fav={favMovies.includes(movie.id)}
             onMovieClick={(newSelectedMovie) => {
               setSelectedMovie(newSelectedMovie);
+              navigate(`/movies/${newSelectedMovie.id}`);
             }}
           />
         ))}
@@ -57,71 +63,74 @@ export const MovieView = ({
   }
 
   return (
-    <Card className="h-100 w-100">
-      <Container>
-        <Row xs={1} sm={1} md={2}>
-          <Col>
-            <img src={movie.ImagePath} alt={movie.Title} />
-          </Col>
-          <Col>
-            <Card.Body>
-              <Card.Title>{movie.Title}</Card.Title>
-              <p>
-                <strong>Description:</strong>
-                {movie.Description}
-              </p>
-              <p>
-                <strong>Genre:</strong>
-                {movie.Genre.Name}
-                {movie.Genre.Description}
-              </p>
-              <p>
-                <strong>Director:</strong>
-                <span>{movie.Director.Name}&nbsp;</span>
-                <span>{movie.Director.Bio}&nbsp;</span>
-                <span>{movie.Director.Birth}&nbsp;</span>
-              </p>
-              <p>
-                <strong>Featured:</strong>
-                {movie.Featured}
-              </p>
-              <p>
-                <strong>Actors:</strong>
-                {movie.Actors.join(', ')}
-              </p>
-              <Button onClick={() => handleFavoriteClick()}>
-                {!isFav ? 'Add to favorites' : 'Remove from favorites'}
-              </Button>
+    <div className="page-background">
+      <Card className="movie-view">
+        <Container>
+          <Row xs={1} sm={1} md={2}>
+            <Col className="image-container">
+              <img className="image" src={movie.imagePath} alt={movie.title} />
+            </Col>
+            <Col className="text-container">
+              <Card.Body>
+                <Card.Title className="card-title">{movie.title}</Card.Title>
+                <p className="description">
+                  <strong>Description: </strong>
+                  {movie.description}
+                </p>
+                <p className="genre">
+                  <strong>Genre: </strong>
+                  {movie.genre.Name}
+                  <br />
+                  {movie.genre.Description}
+                </p>
+                <p className="director">
+                  <strong>Director: </strong>
+                  <span>{movie.director.Name}&nbsp;</span>
+                  <br />
+                  <span>Bio: {movie.director.Bio}&nbsp;</span>
+                  <br />
+                  <span>Birth: {movie.director.Birth}&nbsp;</span>
+                </p>
+                <p className="featured">
+                  <strong>Featured: </strong>
+                  {movie.featured}
+                </p>
+                <p className="actors">
+                  <strong>Actors: </strong>
+                  {movie.actors.join(', ')}
+                </p>
+                <Button onClick={() => handleFavoriteClick()}>
+                  {!isFav ? 'Add to favorites' : 'Remove from favorites'}
+                </Button>
 
-              <Link to="/">
-                <Button>Back</Button>
-              </Link>
-            </Card.Body>
-          </Col>
-        </Row>
-      </Container>
-    </Card>
+                <Link to="/">
+                  <Button className="back-button">Back</Button>
+                </Link>
+              </Card.Body>
+            </Col>
+          </Row>
+        </Container>
+      </Card>
+    </div>
   );
 };
 
 MovieView.propTypes = {
   movies: PropTypes.arrayOf(
     PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      ImagePath: PropTypes.string.isRequired,
-      Title: PropTypes.string.isRequired,
-      Description: PropTypes.string.isRequired,
-      Genre: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+      imagePath: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      genre: PropTypes.shape({
+        Name: PropTypes.string.isRequired,
+        Description: PropTypes.string.isRequired,
       }).isRequired,
-      Director: PropTypes.arrayOf(
-        PropTypes.shape({
-          name: PropTypes.string.isRequired,
-          bio: PropTypes.string.isRequired,
-          birth: PropTypes.string.isRequired,
-        }),
-      ).isRequired,
+      director: PropTypes.shape({
+        Name: PropTypes.string.isRequired,
+        Bio: PropTypes.string.isRequired,
+        Birth: PropTypes.string.isRequired,
+      }).isRequired,
     }),
   ).isRequired,
   favMovies: PropTypes.arrayOf(PropTypes.string).isRequired,

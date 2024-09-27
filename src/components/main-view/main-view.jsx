@@ -8,6 +8,7 @@ import { SignupView } from '../signup-view/signup-view';
 import { NavigationBar } from '../navigation-bar/navigation-bar';
 import { ProfileView } from '../profile-view/profile-view';
 import { MovieCard } from '../movie-card/movie-card';
+import './main-view.scss';
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -15,6 +16,7 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser || null);
   const [token, setToken] = useState(storedToken || null);
   const [movies, setMovies] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
   const [favMovies, setFavMovies] = useState(user?.FavoriteMovies || []);
 
   useEffect(() => {
@@ -25,17 +27,22 @@ export const MainView = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        // This is what the movie object looks like
         const moviesFromApi = data.map((movie) => ({
           id: movie._id,
           title: movie.Title,
           description: movie.Description,
           genre: movie.Genre,
-          director: movie.Director,
+          director: {
+            Name: movie.Director.Name,
+            Bio: movie.Director.Bio,
+            Birth: movie.Director.Birth,
+          },
           actors: movie.Actors,
           featured: movie.Featured,
           imagePath: movie.ImagePath,
         }));
-        console.log(moviesFromApi);
+        // console.log(moviesFromApi); or console.log(data); ??
         setMovies(moviesFromApi);
       })
       .catch((error) => {
@@ -48,10 +55,30 @@ export const MainView = () => {
     else setFavMovies(user.FavoriteMovies || []);
   }, [user]);
 
+  const handleAddToFavorites = (movieId) => {
+    if (!favMovies.includes(movieId)) {
+      setFavMovies([...favMovies, movieId]);
+    }
+  };
+
+  const handleRemoveFromFavorites = (movieId) => {
+    setFavMovies(favMovies.filter((id) => id !== movieId));
+  };
+
+  const handleUpdateUser = (updatedUser) => {
+    setUser(updatedUser);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.clear();
+  };
+
   const renderContent = () => {
     if (!user) {
       return (
-        <Col md={5}>
+        <Col md={5} className="mb-4">
           <LoginView
             onLoggedIn={(loggedInUser, loggedInUserToken) => {
               setUser(loggedInUser);
@@ -64,9 +91,28 @@ export const MainView = () => {
       );
     }
 
+    if (selectedMovie) {
+      return (
+        <MovieView
+          movies={selectedMovie}
+          favMovies={favMovies}
+          onAddToFavorites={handleAddToFavorites}
+          onRemoveFromFavorites={handleRemoveFromFavorites}
+          onBackClick={() => setSelectedMovie(null)}
+        />
+      );
+    }
+
     return (
       <BrowserRouter>
-        <NavigationBar />
+        <NavigationBar
+          user={user}
+          onLoggedOut={() => {
+            setUser(null);
+            setToken(null);
+            localStorage.clear();
+          }}
+        />
         <Row className="justify-content-md-center">
           <Routes>
             <Route
@@ -95,6 +141,26 @@ export const MainView = () => {
                 )
               }
             />
+            <Route
+              path="/"
+              element={
+                <div className="home-background">
+                  <Row className="justify-content-md-center" mb={4}>
+                    {movies.map((movie) => (
+                      <Col key={movie.id} md={3} className="mb-4">
+                        <MovieCard
+                          movie={movie}
+                          fav={favMovies.includes(movie.id)}
+                          onMovieClick={(newSelectedMovie) => {
+                            setSelectedMovie(newSelectedMovie);
+                          }}
+                        />
+                      </Col>
+                    ))}
+                  </Row>
+                </div>
+              }
+            />
             {/* {!user && <Navigate to="/login" replace />} */}
             {/* {user && movies.length === 0 && <Col>The list is empty!</Col>} */}
             {user && movies.length > 0 && (
@@ -103,20 +169,17 @@ export const MainView = () => {
                   path="/movies/:movieId"
                   element={
                     <Col md={8}>
-                      <MovieView movies={movies} favMovies={favMovies} />
-                    </Col>
-                  }
-                />
-                <Route
-                  path="/"
-                  element={movies.map((movie) => (
-                    <Col className="mb-4" key={movie.id} md={3}>
-                      <MovieCard
-                        movie={movie}
-                        fav={favMovies.includes(movie._id)}
+                      <MovieView
+                        movies={movies}
+                        favMovies={favMovies}
+                        onAddToFavorites={handleAddToFavorites}
+                        onRemoveFromFavorites={handleRemoveFromFavorites}
+                        onBackClicked={() => {
+                          setSelectedMovie(null);
+                        }}
                       />
                     </Col>
-                  ))}
+                  }
                 />
                 <Route
                   path="/profile"
@@ -124,14 +187,19 @@ export const MainView = () => {
                     !user ? (
                       <Navigate to="/login" replace />
                     ) : (
-                      <ProfileView
-                        movies={movies}
-                        user={user}
-                        setFavMovies={setFavMovies}
-                      />
+                      <div className="home-background">
+                        <ProfileView
+                          movies={movies}
+                          user={user}
+                          setFavMovies={setFavMovies}
+                          updateUser={handleUpdateUser}
+                          handleUserLogout={handleLogout}
+                        />
+                      </div>
                     )
                   }
                 />
+                <Route path="*" element={<Navigate to="/" replace />} />
               </>
             )}
           </Routes>

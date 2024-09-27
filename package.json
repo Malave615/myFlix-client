@@ -1,6 +1,7 @@
 {
-  "name": "myFlix",
+  "name": "myflix",
   "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel src/index.html"
@@ -15,7 +16,6 @@
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
     "react-dom": "^18.3.1",
-    "react-redux": "^9.1.2",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.25.1",
     "react-scripts": "^5.0.1"

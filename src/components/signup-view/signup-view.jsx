@@ -18,7 +18,7 @@ export const SignupView = () => {
       Birth: birth,
     };
 
-    fetch('https://tracys-movie-api-083e9c37dd14.herokuapp.com/users', {
+    fetch('https://tracys-movie-api-083e9c37dd14.herokuapp.com/users/', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {

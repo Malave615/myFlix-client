@@ -1,7 +1,63 @@
+// Styling for the movie view container
+.movie-view {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    border-radius: 50% 20% / 10% 40%;
+    box-shadow: 5px 10px black;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+// Add spacing to the image
+img {
+    width: 100%; // Make the image responsive
+    max-width: 350px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    
+}
+
+.image-container {
+    flex: 1; // Allows image to grow and fill space
+    display: flex;
+    justify-content: center; // center image horizontally
+    align-items: center; // center image vertically
+}
+
+.text-container {
+    flex: 2; // Allows the text to take up more space
+    padding-left: 20px; // Space between image and text
+}
+
+// Add styling to the title
+.card-title {
+    font: bold sans-serif;
+    text-align: left; // Align text too the left
+    margin-bottom: 10px;
+}
+
+// Adding styling to the paragraphs
+p {
+    font: sans-serif;
+    text-align: left; // Align text to the left
+    margin-bottom: 10px; // Space between paragraphs
+}
+
+// Styling for the description
+.description {
+    font: sans-serif;
+    margin-top: 5px;
+}
+
+// Styling for the back button
 .back-button {
     padding: 4px 12px 4px 12px;
     color: whitesmoke;
     background-color: dodgerblue;
     border: none;
     border-radius: 4px;
+    margin-top: 15px;
 }
+
+
