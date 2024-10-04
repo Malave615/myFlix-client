@@ -1,6 +1,14 @@
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import {
+  useParams,
+  Link,
+  useNavigate,
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from 'react-router-dom';
 import './movie-view.scss';
 import { useState } from 'react';
+
 import PropTypes from 'prop-types';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { MovieCard } from '../movie-card/movie-card';
@@ -12,7 +20,9 @@ export const MovieView = ({
   onRemoveFromFavorites,
 }) => {
   const { movieId } = useParams();
-  const movie = movies.find((m) => m.id === movieId);
+  const movie = (Array.isArray(movies) ? movies : []).find(
+    (m) => m.id === movieId,
+  );
   const [isFav, setIsFav] = useState(favMovies?.includes(movieId) || false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const navigate = useNavigate();
@@ -35,30 +45,37 @@ export const MovieView = ({
 
   if (selectedMovie) {
     return (
-      <>
-        <MovieView
-          movies={selectedMovie}
-          favMovies={favMovies}
-          onAddToFavorites={onAddToFavorites}
-          onRemoveFromFavorites={onRemoveFromFavorites}
-          onBackClicked={() => {
-            setSelectedMovie(null);
-          }}
-        />
-        <br />
-        <h2>Similar Movies</h2>
-        {similarMovies.map((m) => (
-          <MovieCard
-            key={m.id}
-            movie={m}
-            fav={favMovies.includes(movie.id)}
-            onMovieClick={(newSelectedMovie) => {
-              setSelectedMovie(newSelectedMovie);
-              navigate(`/movies/${newSelectedMovie.id}`);
-            }}
-          />
-        ))}
-      </>
+      <Router>
+        <Routes>
+          <Route>
+            <MovieView
+              movies={selectedMovie}
+              favMovies={favMovies}
+              onAddToFavorites={onAddToFavorites}
+              onRemoveFromFavorites={onRemoveFromFavorites}
+              onBackClicked={() => {
+                setSelectedMovie(null);
+              }}
+            />
+          </Route>
+
+          <br />
+          <h2>Similar Movies</h2>
+          <Route>
+            {similarMovies.map((m) => (
+              <MovieCard
+                key={m.id}
+                movie={m}
+                fav={favMovies.includes(movie.id)}
+                onMovieClick={(newSelectedMovie) => {
+                  setSelectedMovie(newSelectedMovie);
+                  navigate(`/movies/${newSelectedMovie.id}`);
+                }}
+              />
+            ))}
+          </Route>
+        </Routes>
+      </Router>
     );
   }
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import PropTypes from 'prop-types';
+import './login-view.scss';
 
 export const LoginView = ({ onLoggedIn }) => {
   const [username, setUsername] = useState('');
@@ -41,7 +42,6 @@ export const LoginView = ({ onLoggedIn }) => {
 
   return (
     <div className="mx-3 my-4">
-      <h1>myFlix</h1>
       <h2>Login</h2>
       <Form
         onSubmit={handleSubmit}
