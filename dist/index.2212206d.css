@@ -1,3 +1,7 @@
+h1 {
+  color: red;
+}
+
 .movie-view {
   border-radius: 50% 20% / 10% 40%;
   width: 100%;
@@ -139,6 +143,14 @@ p {
   height: 40px;
   display: block;
   overflow: hidden;
+}
+
+.header {
+  color: red;
+  text-align: center;
+  font-family: Garamond, serif;
+  font-size: 175px;
+  text-decoration: underline;
 }
 
 .my-flix {
