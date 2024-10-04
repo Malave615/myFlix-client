@@ -4,7 +4,7 @@ import { Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 // import './movie-card.scss';
 
-export const MovieCard = ({ movie, fav, onMovieClick }) => {
+export const MovieCard = ({ movie, fav }) => {
   const [isFav, setIsFav] = useState(fav);
 
   useEffect(() => {
@@ -12,7 +12,7 @@ export const MovieCard = ({ movie, fav, onMovieClick }) => {
   }, [fav]);
 
   return (
-    <Card className="movie-card" onClick={() => onMovieClick(movie)}>
+    <Card className="movie-card">
       <Card.Img
         className="movie-card-image"
         variant="top"
@@ -52,7 +52,6 @@ MovieCard.propTypes = {
     imagePath: PropTypes.string.isRequired,
   }).isRequired,
   fav: PropTypes.bool.isRequired,
-  onMovieClick: PropTypes.func.isRequired,
 };
 
 export default MovieCard;

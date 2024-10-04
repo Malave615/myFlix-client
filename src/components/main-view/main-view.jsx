@@ -16,7 +16,6 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser || null);
   const [token, setToken] = useState(storedToken || null);
   const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
   const [favMovies, setFavMovies] = useState(user?.FavoriteMovies || []);
 
   useEffect(() => {
@@ -79,27 +78,18 @@ export const MainView = () => {
     if (!user) {
       return (
         <Col md={5} className="mb-4">
-          <LoginView
-            onLoggedIn={(loggedInUser, loggedInUserToken) => {
-              setUser(loggedInUser);
-              setToken(loggedInUserToken);
-            }}
-          />
+          <div className="login">
+            <h1 className="header">myFlix</h1>
+            <LoginView
+              onLoggedIn={(loggedInUser, loggedInUserToken) => {
+                setUser(loggedInUser);
+                setToken(loggedInUserToken);
+              }}
+            />
+          </div>
           <p>or</p>
           <SignupView />
         </Col>
-      );
-    }
-
-    if (selectedMovie) {
-      return (
-        <MovieView
-          movies={selectedMovie}
-          favMovies={favMovies}
-          onAddToFavorites={handleAddToFavorites}
-          onRemoveFromFavorites={handleRemoveFromFavorites}
-          onBackClick={() => setSelectedMovie(null)}
-        />
       );
     }
 
@@ -151,9 +141,6 @@ export const MainView = () => {
                         <MovieCard
                           movie={movie}
                           fav={favMovies.includes(movie.id)}
-                          onMovieClick={(newSelectedMovie) => {
-                            setSelectedMovie(newSelectedMovie);
-                          }}
                         />
                       </Col>
                     ))}
@@ -174,9 +161,6 @@ export const MainView = () => {
                         favMovies={favMovies}
                         onAddToFavorites={handleAddToFavorites}
                         onRemoveFromFavorites={handleRemoveFromFavorites}
-                        onBackClicked={() => {
-                          setSelectedMovie(null);
-                        }}
                       />
                     </Col>
                   }
