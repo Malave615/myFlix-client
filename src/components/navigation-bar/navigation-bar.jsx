@@ -49,7 +49,7 @@ NavigationBar.propTypes = {
     Username: PropTypes.string.isRequired,
     Email: PropTypes.string.isRequired,
     Birthday: PropTypes.string,
-    FavoriteMovies: PropTypes.array,
+    FavMovies: PropTypes.array,
   }).isRequired,
   onLoggedOut: PropTypes.func.isRequired,
 };

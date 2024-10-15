@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './profile-view.scss';
 
-const UserInfo = ({ email, name }) => (
+const UserInfo = ({ name, email }) => (
   <>
     <h4>Your Info</h4>
     <p>Name: {name}</p>

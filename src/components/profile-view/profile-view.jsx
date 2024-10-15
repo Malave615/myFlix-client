@@ -1,36 +1,42 @@
 import React, { useEffect } from 'react';
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import './profile-view.scss';
 import PropTypes from 'prop-types';
 import UserInfo from './user-info';
-import FavoriteMovies from './favorite-movies';
+import FavMovies from './favorite-movies';
 import UpdateUser from './update-user';
 
 // Define the ProfileView component
-export const ProfileView = ({ movies, user, updateUser, handleUserLogout }) => {
-  const favoriteMoviesList = user.FavoriteMovies
-    ? movies.filter((m) => user.FavoriteMovies.includes(m.id))
-    : [];
-  /* const handleUserLogout = () => {
-      console.log('User logged out');
-  } */
+export function ProfileView({
+  movies,
+  user,
+  updateUser,
+  handleUserLogout,
+  setFavMovies,
+  setUser,
+  onAddToFavorites,
+  onRemoveFromFavorites,
+}) {
+  const FavMoviesList = movies.filter((movie) =>
+    user.FavMovies.includes(movie.id),
+  );
 
   useEffect(() => {
-    console.log(user);
-  }, [user]);
+    if (user) {
+      console.log(user);
+      setFavMovies(user.FavMovies || []);
+    }
+  }, [user, setFavMovies]);
 
   const handleUpdate = (e) => {
     e.preventDefault();
-
     const updatedUser = {
       Username: e.target.Username.value,
       Password: e.target.Password.value,
     };
 
     fetch(
-      `https://tracys-movie-api-083e9c37dd14.herokuapp.com/users/${
-        user.Username
-      }${localStorage.getItem('user')}`,
+      `https://tracys-movie-api-083e9c37dd14.herokuapp.com/users/${user.Username}`,
       {
         method: 'PUT',
         body: JSON.stringify(updatedUser),
@@ -39,73 +45,77 @@ export const ProfileView = ({ movies, user, updateUser, handleUserLogout }) => {
         },
       },
     )
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to update user.');
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log(data);
         updateUser(data);
       })
       .catch((error) => {
-        console.error('Error updating user: ', e);
-      });
-  };
-
-  // Define removeFav function to handle removing a movie from favorites
-  const removeFav = (movieId) => {
-    // Remove movieId from user's favorite movies list
-    const updatedFavMovies = user.FavoriteMovies.filter((id) => id !== movieId);
-
-    updateUser({ ...user, FavoriteMovies: updatedFavMovies });
-
-    // Send request to update user's favorites on the server
-    fetch(
-      `https://tracys-movie-api-083e9c37dd14.herokuapp.com/users/${user.Username}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ FavoriteMovies: updatedFavMovies }),
-      },
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        updateUser(data);
-      })
-      .catch((error) => {
-        console.error('Error updating favorites: ', error);
+        console.error('Error updating user: ', error);
       });
   };
 
   return (
-    <Container>
+    <Container className="profile-view">
       <Row>
         <h1>{user.Username}'s Profile</h1>
+        <Col>
+          <Card>
+            <Card.Header>
+              <UserInfo name={user.Username} email={user.Email} />
+            </Card.Header>
+          </Card>
+        </Col>
         <Col xs={12} sm={4}>
           <Card>
+            <Card.Header className="card-header">
+              <h2>Favorite Movies</h2>
+            </Card.Header>
             <Card.Body>
-              <UserInfo name={user.Username} email={user.Email} />
-              <FavoriteMovies
-                favoriteMovieList={favoriteMoviesList}
-                removeFav={removeFav}
+              <FavMovies
+                FavMoviesList={FavMoviesList}
+                onAddToFavorites={onAddToFavorites}
+                onRemoveFromFavorites={onRemoveFromFavorites}
+                movies={movies}
               />
-              <UpdateUser user={user} handleUpdate={handleUpdate} />
-              <button type="button" onClick={handleUserLogout}>
-                Logout
-              </button>
             </Card.Body>
+            <Card.Body>
+              <UpdateUser
+                user={user}
+                updateUser={handleUpdate}
+                setUser={setUser}
+              />
+            </Card.Body>
+            <Card.Footer>
+              <Button
+                variant="primary"
+                type="button"
+                onClick={handleUserLogout}
+              >
+                Logout
+              </Button>
+            </Card.Footer>
           </Card>
         </Col>
       </Row>
     </Container>
   );
-};
+}
 
 ProfileView.propTypes = {
   movies: PropTypes.array.isRequired,
   user: PropTypes.object.isRequired,
-  updateUser: PropTypes.func.isRequired,
+  updateUser: PropTypes.func,
   handleUserLogout: PropTypes.func.isRequired,
+  setFavMovies: PropTypes.func.isRequired,
+  setUser: PropTypes.func.isRequired,
+  onAddToFavorites: PropTypes.func.isRequired,
+  onRemoveFromFavorites: PropTypes.func.isRequired,
 };
 
 export default ProfileView;

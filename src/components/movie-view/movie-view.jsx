@@ -1,83 +1,43 @@
-import {
-  useParams,
-  Link,
-  useNavigate,
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import './movie-view.scss';
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import { MovieCard } from '../movie-card/movie-card';
 
-export const MovieView = ({
-  movies,
-  favMovies,
-  onAddToFavorites,
-  onRemoveFromFavorites,
-}) => {
+export const MovieView = (props) => {
+  const { movies, user, FavMovies, onAddToFavorites, onRemoveFromFavorites } =
+    props;
   const { movieId } = useParams();
-  const movie = (Array.isArray(movies) ? movies : []).find(
-    (m) => m.id === movieId,
-  );
-  const [isFav, setIsFav] = useState(favMovies?.includes(movieId) || false);
-  const [selectedMovie, setSelectedMovie] = useState(null);
   const navigate = useNavigate();
+  const [movie, setMovie] = useState(null);
+  const [isFav, setIsFav] = useState(false);
 
-  // const [favMovies, setFavMovies] = useState([]);
+  useEffect(() => {
+    const foundMovie = movies.find((m) => m.id === movieId);
+    setMovie(foundMovie);
+    if (foundMovie) {
+      setIsFav(user.FavMovies.includes(movieId)); // Check if movie is in user's favorites
+    }
+  }, [movieId, movies, user.FavMovies]);
+
+  const handleFavoriteToggle = () => {
+    if (isFav) {
+      onRemoveFromFavorites(movieId);
+    } else {
+      onAddToFavorites(movieId);
+    }
+    setIsFav(!isFav); // Update local state
+    navigate('/profile'); // Navigate to profile after updating favorites
+  };
 
   if (!movie) {
-    return <div>Movie not found</div>;
+    return <div>Loading...</div>;
   }
-
-  const handleFavoriteClick = () => {
-    setIsFav(!isFav);
-    if (isFav) onRemoveFromFavorites(movieId);
-    else onAddToFavorites(movieId);
-  };
 
   const similarMovies = movies.filter(
     (m) => m.id !== movieId && m.genre.Name === movie.genre.Name,
   );
-
-  if (selectedMovie) {
-    return (
-      <Router>
-        <Routes>
-          <Route>
-            <MovieView
-              movies={selectedMovie}
-              favMovies={favMovies}
-              onAddToFavorites={onAddToFavorites}
-              onRemoveFromFavorites={onRemoveFromFavorites}
-              onBackClicked={() => {
-                setSelectedMovie(null);
-              }}
-            />
-          </Route>
-
-          <br />
-          <h2>Similar Movies</h2>
-          <Route>
-            {similarMovies.map((m) => (
-              <MovieCard
-                key={m.id}
-                movie={m}
-                fav={favMovies.includes(movie.id)}
-                onMovieClick={(newSelectedMovie) => {
-                  setSelectedMovie(newSelectedMovie);
-                  navigate(`/movies/${newSelectedMovie.id}`);
-                }}
-              />
-            ))}
-          </Route>
-        </Routes>
-      </Router>
-    );
-  }
 
   return (
     <div className="page-background">
@@ -91,17 +51,23 @@ export const MovieView = ({
               <Card.Body>
                 <Card.Title className="card-title">{movie.title}</Card.Title>
                 <p className="description">
-                  <strong>Description: </strong>
+                  <strong>
+                    <u>Description:</u>{' '}
+                  </strong>
                   {movie.description}
                 </p>
                 <p className="genre">
-                  <strong>Genre: </strong>
+                  <strong>
+                    <u>Genre:</u>{' '}
+                  </strong>
                   {movie.genre.Name}
                   <br />
                   {movie.genre.Description}
                 </p>
                 <p className="director">
-                  <strong>Director: </strong>
+                  <strong>
+                    <u>Director:</u>{' '}
+                  </strong>
                   <span>{movie.director.Name}&nbsp;</span>
                   <br />
                   <span>Bio: {movie.director.Bio}&nbsp;</span>
@@ -109,15 +75,20 @@ export const MovieView = ({
                   <span>Birth: {movie.director.Birth}&nbsp;</span>
                 </p>
                 <p className="featured">
-                  <strong>Featured: </strong>
+                  <strong>
+                    <u>Featured:</u>{' '}
+                  </strong>
                   {movie.featured}
                 </p>
                 <p className="actors">
-                  <strong>Actors: </strong>
+                  <strong>
+                    <u>Actors:</u>{' '}
+                  </strong>
                   {movie.actors.join(', ')}
                 </p>
-                <Button onClick={() => handleFavoriteClick()}>
-                  {!isFav ? 'Add to favorites' : 'Remove from favorites'}
+
+                <Button onClick={handleFavoriteToggle}>
+                  {isFav ? 'Remove from Favorites' : 'Add to Favorites'}
                 </Button>
 
                 <Link to="/">
@@ -126,6 +97,18 @@ export const MovieView = ({
               </Card.Body>
             </Col>
           </Row>
+
+          <h3>Similar Movies</h3>
+          <Row xs={1} sm={2} md={3} className="similar-movies-card">
+            {similarMovies.map((similarMovie) => (
+              <Col key={similarMovie.id}>
+                <MovieCard
+                  movie={similarMovie}
+                  fav={FavMovies.includes(similarMovie.id)}
+                />
+              </Col>
+            ))}
+          </Row>
         </Container>
       </Card>
     </div>
@@ -133,26 +116,9 @@ export const MovieView = ({
 };
 
 MovieView.propTypes = {
-  movies: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      imagePath: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      genre: PropTypes.shape({
-        Name: PropTypes.string.isRequired,
-        Description: PropTypes.string.isRequired,
-      }).isRequired,
-      director: PropTypes.shape({
-        Name: PropTypes.string.isRequired,
-        Bio: PropTypes.string.isRequired,
-        Birth: PropTypes.string.isRequired,
-      }).isRequired,
-    }),
-  ).isRequired,
-  favMovies: PropTypes.arrayOf(PropTypes.string).isRequired,
+  movies: PropTypes.array.isRequired,
+  user: PropTypes.object.isRequired,
+  FavMovies: PropTypes.array,
   onAddToFavorites: PropTypes.func.isRequired,
   onRemoveFromFavorites: PropTypes.func.isRequired,
 };
-
-export default MovieView;
