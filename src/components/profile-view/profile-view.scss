@@ -1,7 +1,4 @@
 .profile-view {
-  h1 {
-    color: whitesmoke;
-  }
   .fav-movie {
     margin-bottom: 15px;
 
@@ -30,6 +27,7 @@
     }
     
     .card {
+      margin: 20px 0;
       margin-bottom: 15px;
     }
   }
@@ -37,6 +35,13 @@
   h1 {
     color: #FFFF00;
     font-style: oblique;
+    text-align: center;
+    text-decoration: underline;
+  }
+
+  h3 {
+    text-align: center;
+    text-decoration: underline;
   }
 
   h4 {
@@ -51,5 +56,40 @@
   .card-body {
     background-color: black;
     color: #FFFF00;
+  }
+
+  .profile-form {
+    margin: 20px auto;
+    max-width: 500px;
+  
+    h2 {
+      color:#FFFF00;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+
+      label {
+        color: #FFFF00;
+      }
+
+      input {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+    }
+
+    button {
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      margin-top: 25px;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
   }
 }

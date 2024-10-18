@@ -48,24 +48,6 @@ const FavMovies = ({
             </Col>
           )}
         </Row>
-        <Row>
-          <Col xs={12}>
-            <h4>Add a movie to Favorites</h4>
-            {Array.isArray(movies) && movies.length > 0 ? (
-              movies.map(({ id, title }) => (
-                <Button
-                  key={id}
-                  onClick={() => onAddToFavorites(id)}
-                  aria-label={`Add ${title} to favorites`}
-                >
-                  {title}
-                </Button>
-              ))
-            ) : (
-              <p>No movies available</p>
-            )}
-          </Col>
-        </Row>
       </Card.Body>
     </Card>
   );

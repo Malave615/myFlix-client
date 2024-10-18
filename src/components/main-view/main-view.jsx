@@ -188,79 +188,83 @@ export const MainView = () => {
     return (
       <BrowserRouter>
         <NavigationBar user={user} onLoggedOut={handleLogout} />
-        <div className="page-backgorund">
-          <Row className="justify-content-md-center">
-            <input
-              type="text"
-              placeholder="Search for a movie by title..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <div className="home-background">
-                    <Row className="justify-content-md-center" mb={4}>
-                      {filteredMovies.map((movie) => (
-                        <Col key={movie.id} md={3} className="mb-4">
-                          <MovieCard
-                            movie={movie}
-                            fav={FavMovies.includes(movie.id)}
-                          />
-                          <Link to={`/movies/${movie.id}`} />
-                        </Col>
-                      ))}
-                    </Row>
-                  </div>
-                }
-              />
-              <Route
-                path="/signup"
-                element={
-                  user ? (
-                    <Navigate to="/" />
-                  ) : (
-                    <Col md={5}>
-                      <SignupView />
+        <div className="page-background">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <div className="home-background">
+                  <Row className="justify-content-md-center">
+                    <Col md={12} className="mb-4">
+                      <input
+                        type="text"
+                        placeholder="Search for a movie by title..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="search-input"
+                      />
                     </Col>
-                  )
-                }
-              />
-              <Route
-                path="/login"
-                element={
-                  user ? (
-                    <Navigate to="/" />
-                  ) : (
-                    <Col md={5}>
-                      <LoginView onLoggedIn={handleLogIn} />
-                    </Col>
-                  )
-                }
-              />
-              {user && movies.length > 0 && (
-                <>
-                  <Route
-                    path="/movies/:movieId"
-                    element={
-                      <Col md={8}>
-                        <MovieView
-                          movies={movies}
-                          user={user || {}}
-                          FavMovies={FavMovies}
-                          onAddToFavorites={handleAddToFavorites}
-                          onRemoveFromFavorites={handleRemoveFromFavorites}
+                  </Row>
+                  <Row className="justify-content-md-center" mb={4}>
+                    {filteredMovies.map((movie) => (
+                      <Col key={movie.id} md={3} className="mb-4">
+                        <MovieCard
+                          movie={movie}
+                          fav={FavMovies.includes(movie.id)}
                         />
+                        <Link to={`/movies/${movie.id}`} />
                       </Col>
-                    }
-                  />
-                  <Route
-                    path="/profile"
-                    element={
-                      <Col md={12}>
-                        <div className="home-background">
+                    ))}
+                  </Row>
+                </div>
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                user ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Col md={5}>
+                    <SignupView />
+                  </Col>
+                )
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                user ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Col md={5}>
+                    <LoginView onLoggedIn={handleLogIn} />
+                  </Col>
+                )
+              }
+            />
+            {user && movies.length > 0 && (
+              <>
+                <Route
+                  path="/movies/:movieId"
+                  element={
+                    <Col md={8}>
+                      <MovieView
+                        movies={movies}
+                        user={user || {}}
+                        FavMovies={FavMovies}
+                        onAddToFavorites={handleAddToFavorites}
+                        onRemoveFromFavorites={handleRemoveFromFavorites}
+                      />
+                    </Col>
+                  }
+                />
+                <Route
+                  path="/profile"
+                  element={
+                    <div className="home-background">
+                      <Row className="justify-content-md-center">
+                        <Col md={12}>
                           <ProfileView
                             movies={movies}
                             user={user}
@@ -271,15 +275,15 @@ export const MainView = () => {
                             onAddToFavorites={handleAddToFavorites}
                             onRemoveFromFavorites={handleRemoveFromFavorites}
                           />
-                        </div>
-                      </Col>
-                    }
-                  />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </>
-              )}
-            </Routes>
-          </Row>
+                        </Col>
+                      </Row>
+                    </div>
+                  }
+                />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </>
+            )}
+          </Routes>
         </div>
       </BrowserRouter>
     );

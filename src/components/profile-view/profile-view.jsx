@@ -62,19 +62,21 @@ export function ProfileView({
 
   return (
     <Container className="profile-view">
-      <Row>
+      <Row className="justify-content-center">
         <h1>{user.Username}'s Profile</h1>
-        <Col>
+        <Col xs={12} md={8} className="text-center">
           <Card>
             <Card.Header>
               <UserInfo name={user.Username} email={user.Email} />
             </Card.Header>
           </Card>
         </Col>
-        <Col xs={12} sm={4}>
+      </Row>
+      <Row className="justify-content-center mt-4">
+        <Col xs={12} md={8} sm={4}>
           <Card>
             <Card.Header className="card-header">
-              <h2>Favorite Movies</h2>
+              <h3>Favorite Movies</h3>
             </Card.Header>
             <Card.Body>
               <FavMovies
