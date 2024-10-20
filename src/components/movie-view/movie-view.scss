@@ -11,12 +11,14 @@
 // Styling for the movie view container
 .movie-view {
     width: 100%;
+    //max-width: 800px;
     display: flex;
     border-radius: 50% 20% / 10% 40%;
     box-shadow: 5px 10px black;
     padding: 20px;
     margin-bottom: 30px;
     background-color: rgba(255, 255, 255, 0.8);
+    justify-content: center;
 }
 
 // Add spacing to the image
@@ -60,6 +62,13 @@ p {
     margin-top: 5px;
 }
 
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    justify-content: space-around;
+}
+
 // Styling for the back button
 .back-button {
     padding: 4px 12px 4px 12px;
@@ -68,6 +77,12 @@ p {
     border: none;
     border-radius: 4px;
     margin-top: 15px;
+}
+
+h3 {
+    color: black;
+    text-align: center;
+    text-decoration: underline;
 }
 
 .similar-movies-card {

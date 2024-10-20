@@ -34609,14 +34609,13 @@ const MainView = ()=>{
             movieId
         ]));
         // Make API call to update favorites on the server
-        fetch(`https://tracys-movie-api-083e9c37dd14.herokuapp.com/users/${user.Username}`, {
-            method: "PUT",
+        fetch(`https://tracys-movie-api-083e9c37dd14.herokuapp.com/users/${user.Username}/movies/${movieId}`, {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({
-                ...user,
                 FavMovies: updatedFavMovies
             })
         }).then((response)=>{
@@ -34637,22 +34636,19 @@ const MainView = ()=>{
             return;
         }
         const updatedFavMovies = user.FavMovies.filter((id)=>id !== movieId);
-        fetch(`https://tracys-movie-api-083e9c37dd14.herokuapp.com/users/${user.Username}`, {
-            method: "PUT",
+        fetch(`https://tracys-movie-api-083e9c37dd14.herokuapp.com/users/${user.Username}/movies/${movieId}`, {
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                ...user,
-                FavMovies: updatedFavMovies
-            })
+            }
         }).then((response)=>{
             if (!response.ok) throw new Error(`Failed to update favorites: ${response.status} ${response.statusText}`);
             return response.json();
         }).then((data)=>{
             console.log("Updated user data:", data);
             updateUserState(data);
+            setFavMovies(data.FavMovies || []);
         }).catch((error)=>{
             console.error("Error removing from Favorites:", error);
         });
