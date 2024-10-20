@@ -188,21 +188,23 @@ export const MainView = () => {
     return (
       <BrowserRouter>
         <NavigationBar user={user} onLoggedOut={handleLogout} />
-        <div className="page-background">
+        <div className="home-background">
           <Routes>
             <Route
               path="/"
               element={
-                <div className="home-background">
+                <div>
                   <Row className="justify-content-md-center">
                     <Col md={12} className="mb-4">
-                      <input
-                        type="text"
-                        placeholder="Search for a movie by title..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="search-input"
-                      />
+                      <div className="search-container">
+                        <input
+                          type="text"
+                          placeholder="Search for a movie by title..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="search-input long-input"
+                        />
+                      </div>
                     </Col>
                   </Row>
                   <Row className="justify-content-md-center" mb={4}>

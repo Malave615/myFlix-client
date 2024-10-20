@@ -87,13 +87,15 @@ export const MovieView = (props) => {
                   {movie.actors.join(', ')}
                 </p>
 
-                <Button onClick={handleFavoriteToggle}>
-                  {isFav ? 'Remove from Favorites' : 'Add to Favorites'}
-                </Button>
+                <div className="button-container">
+                  <Button onClick={handleFavoriteToggle}>
+                    {isFav ? 'Remove from Favorites' : 'Add to Favorites'}
+                  </Button>
 
-                <Link to="/">
-                  <Button className="back-button">Back</Button>
-                </Link>
+                  <Link to="/">
+                    <Button className="back-button">Back</Button>
+                  </Link>
+                </div>
               </Card.Body>
             </Col>
           </Row>

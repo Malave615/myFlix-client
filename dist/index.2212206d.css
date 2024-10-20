@@ -187,9 +187,25 @@ p {
   background-repeat: no-repeat;
   background-size: cover;
   flex-direction: column;
-  width: 100vw;
+  min-width: 100vw;
   min-height: 100vh;
   display: flex;
+}
+
+.search-container {
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  display: flex;
+}
+
+.long-input {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 600px;
+  padding: 10px;
+  font-size: 16px;
 }
 
 .movie-card {
@@ -200,8 +216,8 @@ p {
   width: 100%;
   max-width: 250px;
   height: 400px;
-  margin: 0 auto 30px;
-  padding: 20px;
+  margin: 0 auto 15px;
+  padding: 15px;
   display: flex;
   box-shadow: 5px 5px 10px #00000080;
 }
@@ -216,17 +232,10 @@ p {
 .movie-card-content {
   flex-direction: column;
   flex-grow: 1;
-  justify-content: space-between;
-  margin-left: 15px;
+  justify-content: flex-start;
+  margin-left: 10px;
+  padding: 5px;
   display: flex;
-}
-
-.movie-card-content p {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  height: 40px;
-  display: block;
-  overflow: hidden;
 }
 
 .header {
@@ -235,6 +244,30 @@ p {
   font-family: Garamond, serif;
   font-size: 175px;
   text-decoration: underline;
+}
+
+.card-button {
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+  margin-bottom: 5px;
+  display: flex;
+}
+
+.card-text {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 5px;
+  max-height: none;
+  margin: 2px 0;
+  padding: 2px;
+  overflow: hidden;
+}
+
+.card-title {
+  margin: 0;
+  padding: 2px 0;
+  font-size: 18px;
 }
 
 .my-flix {

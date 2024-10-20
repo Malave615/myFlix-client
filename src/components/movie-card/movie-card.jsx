@@ -13,10 +13,12 @@ export const MovieCard = ({ movie }) => (
       alt={movie.title}
     />
     <Card.Body className="movie-card-content">
-      <Card.Title>{movie.title}</Card.Title>
-      <Card.Text>{movie.description}</Card.Text>
+      <Card.Title className="card-title">{movie.title}</Card.Title>
+      <Card.Text className="card-text">{movie.description}</Card.Text>
       <Link to={`/movies/${movie.id}`}>
-        <Button variant="primary">View Details</Button>
+        <Button variant="primary" className="card-button">
+          View Details
+        </Button>
       </Link>
     </Card.Body>
   </Card>
