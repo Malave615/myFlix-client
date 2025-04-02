@@ -24,22 +24,27 @@ export const SignupView = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-    }).then((response) => {
-      if (response.ok) {
-        alert('Signup successful!');
-        window.location.reload();
-      } else {
-        alert('Signup failed.');
-      }
-    });
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert('Signup successful!');
+          window.location.reload();
+        } else {
+          return response.json().then((data) => {
+            alert(`Signup failed: ${data.message || 'Unknown error'}`);
+          });
+        }
+      })
+      .catch((error) => {
+        alert(`Network error: ${error.message}`);
+      });
   };
 
   return (
     <div>
       <h1>Sign Up</h1>
       <Form
-        on
-        Submit={handleSubmit}
+        onSubmit={handleSubmit}
         className="justify-content-center align-items-center"
       >
         <Form.Group controlId="signUpFormUsername">

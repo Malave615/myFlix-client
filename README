@@ -1,98 +1,264 @@
-My Movie API
+# My Movie API
 
-Project Overview
-myFlix-client is the front-end application for a movie database movie_api I previously built. It allows users to browse a collection of movies, view detailed information about each movie, create and manage an account including adding a list of their favorite movies.
+This is a server-side app for a movie api developed using React, React Bootstap, Node.js and Express based on existing server-side code (REST API and database). The client-side of the myFlix app will include several interface views (built using the React library) that will handle data through the (previously defined) REST API endpoints. This will complete the web app (both server-side and client-side) built using the MERN tech stack (MongoDB, Express, React and Node.js).
 
-Objective:
-This is a server-side app for a movie api developed using React, React Bootstap, Node.js and Express based on existing server-side code (REST API and database).
+## Table of Contents
 
-The app consists of a list of movies along with a picture. The information displayed for each movie includes it's title, description, director and genre. The app also allows users to register an account in order to create a favMovies category.
+1. [Project Overview](#project-overview)
+2. [Features](#features)
+3. [Project Dependencies](#project-dependencies)
+4. [Setup and Installation](#setup;-and-installation)
+5. [Endpoints](#endpoints)
+6. [Testing](#testing)
+7. [Author](#author)
 
-The client-side of the myFlix app will include several interface views (built using the React library) that will
-handle data through the (previously defined) REST API endpoints. This will complete the web app (both server-side and client-side) built using the MERN tech stack (MongoDB, Express, React and Node.js).
+## Project Overview
 
-The projects dependencies are: \_Node.js \_Express \_React \_MongoDB \_jsonWebToken \_Mongoose \_body-parser and \_passport.
+myFlix-client is the front-end application for a movie API that I previously built. The app consists of a list of movies along with a picture. The information displayed for each movie includes it's title, description, director, genre, and starring actors. The app also allows users to register an account in order to create a favMovies category.
 
-Endpoints:
-POST User Login
-URL: /login
-Request body: A JSON object with a username and password structured as follows:
-'Username': '{username}', 'Password': '{password}'
-Response body: JWT Auth token
-'token': '######'
+## Features
 
-POST Register a New User
-*URL: /users
-*Request body: A JSON object with username, password and email structured as follows:
-{
-'Username': '{username}',
-'Password': '{password}',
-'Email': '{email}'
-}
-\*Response body: JWT Auth Token
-'token': '######'
+### 1. **Main View:**
 
-PUT Update User Info
-*URL: /users/{username}
-*Authorization: JWT Auth token
-*Request body: A JSON object with username, password, email and birthday structured as follows:
-'Username': {username}, 'Password': {password}, 'Email': {email}, 'Birthday': {MM/DD/YYY}
-*Response body: A JSON object structured the same with the updated information.
+- Displays a list of all available movies.
+- Allows users to filter the list of movies using a search feature.
+- Users can select a movie from the list to view more details.
+- Option for users to log out from the app.
+- Navigates to the user profile view from the main view.
 
-GET Movie Api homepage
-*URL: /
-*Auhroization: JWT Auth token
+### 2. **Single Movie View:**
 
-PUT Add a movie to user's Favs
-*URL: /users/{username}/movies/{ObjectID}
-*Authorization: JWT Auth token
-*Request body: none
-*Response body: A JSON object with the movieID added to the favMovies array.
+- Displays detailed information about a specific movie (e.g., description, genre, director, image).
+- Allows users to add the movie to their list of favorite movies.
+- Displays the starring actors for each movie.
+- Provides the option to view more information about the movie, such as release date.
+- Allows users to access additional movie-related information (e.g., genre description and director bio) without leaving the view.
 
-GET A list of all movies
-*URL: /movies
-*Authorization: JWT Auth token
-*Request body: none
-*Response body: A JSON object containing a list of all the movies in the database.
+### 3. **Login View:**
 
-GET A list of all Users
-*URL: /users
-*Authorization: JWT Auth token
-*Request body: none
-*Response body: A JSON object containing a list of all the users in the database.
+- Allows users to log in with their username and password.
 
-GET User by username
-*URL: /users/{username}
-*Authorization: JWT Auth token
-*Request body: none
-*Response body: A JSON object containing all the info on that user.
+### 4. **Signup View:**
 
-GET Movie by Title
-*URL: /movies/{title}
-*Authorization: JWT Auth token
-*Request body: none
-*Response body: A JSON object containing all the info on that particular movie.
+- Allows new users to register with the following details:
+  - Username
+  - Password
+  - Email
+  - Date of Birth
 
-GET Data about a Genre by name
-*URL: /movies/genre/{genreName}
-*Authorization: JWT Auth token
-*Request body: none
-*Response body: A JSON object containing info about that genre including the name of the genre and a description.
+### 5. **Profile View:**
 
-GET Data about a Director by name
-*URL: /movies/director/{directorName}
-*Authorization: JWT Auth token
-*Request body: none
-*Response body: A JSON object containing info about that director including name, bio and birth year.
+- Displays the user's registration details (e.g., username, email, birthday).
+- Allows users to update their profile information (username, password, email, birthday).
+- Displays the user's favorite movies.
+- Allows users to remove a movie from their favorties list.
+- Provides and option for users to deregister their account.
 
-DELETE Movie from user's Favs
-*URL: /users/{username}/movies/{ObjectID}
-*Authorization: JWT Auth token
-*Request body: none
-*Response body: A JSON object containing all the users info with the ObjectID for that movie removed from their favMovie array.
+### 6. **Genre View:**
 
-DELETE user by username
-*URL: /users/{username}
-*Authorization: JWT Auth token
-*Request body: none
-*Response body: A response stating that the user has been deleted.
+- Displays information about a specific genre, including it's name and description.
+- Shows a list of example movies within that genre.
+
+### 7. **Director View:**
+
+- Displays information about a director, including their name, biography, and birth year.
+
+### 8. **General Features Across Views:**
+
+- **Favorites List:** Allows users to create and manage a 'Favorite Movies' list across the main, profile, and single movie views.
+- **Dynamic Data Interaction:** Allows users to interact with various data points, like genres, directors, and actors, without leaving the current view.
+
+## Projects Dependencies:
+
+- Node.js
+- Express
+- React
+- MongoDB
+- jsonWebToken
+- Mongoose
+- body-parser
+- passport
+
+## Setup and Installation
+
+### 1. **Clone Github Repositories**:
+
+- Clone the front-end (myFlix-client) repository:
+  ```bash
+  git clone https://github.com/Malave615/myFlix-client
+  ```
+- Clone the back-end (movie_api) repository:
+
+  ```bash
+  git clone https://github.com/Malave615/movie_api
+  ```
+
+  \*Note: If you only wish to test the front-end, you may skip the back-end setup. However, to fully run the app locally, you will need both repositories.
+
+### 2. **Install Dependencies for Both Repositories**:
+
+- Navigate to myFlix-client project folder:
+  ```bash
+  cd myFlix-client
+  npm install
+  ```
+- Navigate to the movie_api project folder:
+  ```bash
+  cd movie_api
+  npm install
+  ```
+
+### 3. **Run the App Locally**:
+
+```bash
+npm start
+```
+
+You can view the app at `http://localhost: 3000` in your browser
+
+### 4. **Live Demo**
+
+You can view the live demo of the myFlix app here:
+[Live Demo: myFlix Client](https://malave615.github.io/myFlix-client/)
+
+## Endpoints
+
+### 1. POST User Login
+
+- **URL**: `/login`
+- **Request body**: A JSON object with a username and password structured as follows:
+  ```json
+  {
+    "Username": "{username}",
+    "Password": "{password}"
+  }
+  ```
+- **Response body**:
+  {
+  "token": "######"
+  }
+
+### 2. POST Register a New User
+
+- **URL**: `/users`
+- **Request body**: A JSON object with username, password and email structured as follows:
+  {
+  "Username": "{username}",
+  "Password": "{password}",
+  "Email": "{email}"
+  }
+- **Response body**: JWT Auth Token
+  {
+  "token": "######"
+  }
+
+### 3. PUT Update User Info
+
+- **URL**: `/users/{username}`
+- **Authorization**: JWT Auth token
+- **Request body**: A JSON object with username, password, email and birthday structured as follows:
+  {
+  "Username": "{username}",
+  "Password": "{password}",
+  "Email": "{email}",
+  "Birthday": "{MM/DD/YYY}"
+  }
+- **Response body**: A JSON object structured the same with the updated information.
+
+### 4. GET Movie Api homepage
+
+- **URL**: `/`
+- **Authorization**: JWT Auth token
+
+### 5. PUT Add a movie to user's Favs
+
+- **URL**: `/users/{username}/movies/{ObjectID}`
+- **Authorization**: JWT Auth token
+- **Request body**: none
+- **Response body**: A JSON object with the movieID added to the favMovies array.
+
+### 6. GET A list of all movies
+
+- **URL**: `/movies`
+- **Authorization**: JWT Auth token
+- **Request body**: none
+- **Response body**: A JSON object containing a list of all the movies in the database.
+
+### 7. GET A list of all Users
+
+- **URL**: `/users`
+- **Authorization**: JWT Auth token
+- **Request body**: none
+- **Response body**: A JSON object containing a list of all the users in the database.
+
+### 8. GET User by username
+
+- **URL**: `/users/{username}`
+- **Authorization**: JWT Auth token
+- **Request body**: none
+- **Response body**: A JSON object containing all the info on that user.
+
+### 9. GET Movie by Title
+
+- **URL**: `/movies/{title}`
+- **Authorization**: JWT Auth token
+- **Request body**: none
+- **Response body**: A JSON object containing all the info on that particular movie.
+
+### 10. GET Data about a Genre by name
+
+- **URL**: `/movies/genre/{genreName}`
+- **Authorization**: JWT Auth token
+- **Request body**: none
+- **Response body**: A JSON object containing info about that genre including the name of the genre and a description.
+
+### 11. GET Data about a Director by name
+
+- **URL**: `/movies/director/{directorName}`
+- **Authorization**: JWT Auth token
+- **Request body**: none
+- **Response body**: A JSON object containing info about that director including name, bio and birth year.
+
+### 12. DELETE Movie from user's Favs
+
+- **URL**: `/users/{username}/movies/{ObjectID}`
+- **Authorization**: JWT Auth token
+- **Request body**: none
+- **Response body**: A JSON object containing all the users info with the ObjectID for that movie removed from their favMovie array.
+
+### 13. DELETE user by username
+
+- **URL**: `/users/{username}`
+- **Authorization**: JWT Auth token
+- **Request body**: none
+- **Response body**: A response stating that the user has been deleted.
+
+## Testing
+
+To run the tests, follow the instructions below:
+
+1. **Run Front-end Tests:**
+
+- Navigate to the client directory and run the following command:
+  ```bash
+  npm test
+  ```
+  - This will run tests using [Jest](https://jestjs.io/), and output results to the console.
+
+2. **Run Back-end Tests:**
+
+- Navigate to the server directory (if applicable) and run the following command:
+  ```bash
+  npm test
+  ```
+  - Back-end tests will be executed with [Mocha](https://mochajs.org/) and [Chai](https://www.chaijs.com/)
+
+## Author
+
+**Tracy Malavé**
+Github Profile:
+[Malave615](https://github.com/Malave615)
+
+```
+
+```
